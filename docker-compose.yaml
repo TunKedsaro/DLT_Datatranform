@@ -1,0 +1,39 @@
+# version: '3.8'
+
+# services:
+#   etl_service:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: etl_container
+#     command: python /app/script/etl_script.py
+#     volumes:
+#       - ./scripts:/app/script
+#     environment:
+#       - PYTHONUNBUFFERED=1
+
+
+# services:
+#   etl_service:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: etl_container
+#     volumes:
+#       - ./script:/app/script
+#     tty: true # Enable terminal interaction
+
+services:
+  etl_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: etl_container
+    ports:
+      - "8888:8888"  # Expose Jupyter Notebook
+    volumes:
+      - ./script:/app/script  # Mount the scripts folder
+      - ./dlt-data-dashboard:/app/dlt-data-dashboard
+      - ./notebooks:/app/notebooks  # Mount a notebooks folder for .ipynb files
+    tty: true  # Enable terminal interaction
+    command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root
