@@ -23,6 +23,24 @@
 #       - ./script:/app/script
 #     tty: true # Enable terminal interaction
 
+# services:
+#   etl_service:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: etl_container
+#     ports:
+#       - "8888:8888"  # Expose Jupyter Notebook
+#     volumes:
+#       - ./script:/app/script  # Mount the scripts folder
+#       - ./dlt-data-dashboard:/app/dlt-data-dashboard
+#       - ./notebooks:/app/notebooks  # Mount a notebooks folder for .ipynb files
+#     tty: true  # Enable terminal interaction
+#     command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+
+
+# version: '3.8'
+
 services:
   etl_service:
     build:
@@ -32,8 +50,29 @@ services:
     ports:
       - "8888:8888"  # Expose Jupyter Notebook
     volumes:
-      - ./script:/app/script  # Mount the scripts folder
+      - ./script:/app/script
       - ./dlt-data-dashboard:/app/dlt-data-dashboard
-      - ./notebooks:/app/notebooks  # Mount a notebooks folder for .ipynb files
-    tty: true  # Enable terminal interaction
+      - ./notebooks:/app/notebooks
+    tty: true
+    depends_on:
+      - mysql_db  # Ensure MySQL starts before ETL
+    environment:
+      MYSQL_HOST: mysql_db  # Hostname for MySQL inside the network
     command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_container
+    ports:
+      - "3306:3306"  # Expose MySQL on default port
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Root password for MySQL
+      MYSQL_DATABASE: dlt_data  # Default database
+      MYSQL_USER: dlt_user  # User for the database
+      MYSQL_PASSWORD: dlt_password  # Password for the user
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persist MySQL data
+
+volumes:
+  mysql_data:  # Named volume to persist MySQL data
+
