@@ -11,7 +11,7 @@ async def health_check():
     }
 
 @app.post("/api")
-async def accident_classify(sentence: str = "นาย A ขับรถชนนาย B"):
+async def accident_classify(sentence: str = "นาย A ขับรถชนนาง B"):
     x = main(sentence)
     results = {
         "sentence":sentence,

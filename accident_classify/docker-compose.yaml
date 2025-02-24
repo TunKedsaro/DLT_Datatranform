@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: dockerfile
     volumes:
+      - ./src:/app
       - ./models:/app/models
       - ./data:/app/data
     ports:
