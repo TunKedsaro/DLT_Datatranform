@@ -1,0 +1,14 @@
+# API
+fastapi
+python-multipart
+uvicorn
+# File manager
+pandas 
+numpy
+# Wangchanberta
+torch
+transformers
+sentencepiece
+protobuf
+# Machine Learning
+lightgbm

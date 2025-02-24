@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  dev:
+    container_name : accident-classify
+    build:
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+    ports:
+      - "3001:3001"
+    networks:
+      - accident_classify
+    command: uvicorn api:app --host 0.0.0.0 --port 3001 --reload
+    restart: unless-stopped
+
+networks:
+  accident_classify:
+    driver: bridge
